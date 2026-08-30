@@ -14,8 +14,11 @@ class FindRegex extends EventEmitter {
   }
 
   find() {
+    //  S  O  L  U  T  I  O  N  (START)
     const currentFiles = [...this.files];
     process.nextTick(() => this.emit("starts", currentFiles));
+    // (END)
+    // beware of Zalgo!, using "process.nextTick" makes sure the method stays asynchronous
     for (const file of this.files) {
       readFile(file, "utf8", (err, content) => {
         if (err) {
