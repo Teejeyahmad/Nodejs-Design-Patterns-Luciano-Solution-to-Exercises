@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "scripts": {
+    "3.2": "node index.js"
+  }
+}

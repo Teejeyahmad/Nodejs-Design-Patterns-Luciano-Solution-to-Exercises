@@ -1,5 +1,6 @@
 import { EventEmitter } from "node:events";
 import { readFile } from "node:fs";
+import { basename } from "node:path";
 
 class FindRegex extends EventEmitter {
   constructor(regex) {
@@ -19,7 +20,7 @@ class FindRegex extends EventEmitter {
     process.nextTick(() => this.emit("starts", currentFiles));
     // (END)
     // beware of Zalgo!, using "process.nextTick" makes sure the method stays asynchronous
-    //You'll be able to add listener to the "starts" event after the function invocation, else
+    //You'll be able to add listener to the "starts" event after the function invocation,
     for (const file of this.files) {
       readFile(file, "utf8", (err, content) => {
         if (err) {
@@ -45,8 +46,11 @@ findRegexInstance
   .addFile(new URL("fileA.txt", import.meta.url))
   .addFile(new URL("fileB.json", import.meta.url))
   .find()
-  .on("starts", (files) => console.log(`Browsing ${files.join(", ")}`))
+  .on("starts", (files) => {
+    files = files.map((file) => basename(file.pathname));
+    console.log(`\x1b[32mBrowsing ${files}\x1b[0m`);
+  })
   .on("found", (file, match) =>
-    console.log(`Matched "${match}" in file ${file}`),
+    console.log(`Matched "${match}" in ${basename(file.pathname)}`),
   )
   .on("error", (err) => console.error(`Error emitted ${err.message}`));
