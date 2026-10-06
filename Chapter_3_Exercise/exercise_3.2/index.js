@@ -39,4 +39,4 @@ function ticker (num, cb){
     return emitter
 };
 
-ticker(120,(err,data,time)=>(console.log(`\x1b[32mTotal ticks: ${data}, Total time: ${time}\x1b[0m`))).on('tick',(ticks,time)=>console.log(`Tick: ${ticks}, Time: ${time}`));
+ticker(2049,(err,data,time)=>(console.log(`\x1b[32mTotal ticks: ${data}, Total time: ${time}\x1b[0m`))).on('tick',(ticks,time)=>console.log(`Tick: ${ticks}, Time: ${time}`));
