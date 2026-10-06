@@ -1,5 +1,6 @@
 {
   "scripts": {
-    "3.1": "node Chapter_3_Exercise/exercise_3.1/index.js"
+    "3.1": "node Chapter_3_Exercise/exercise_3.1/index.js",
+    "3.2": "node Chapter_3_Exercise/exercise_3.2/index.js"
   }
 }
