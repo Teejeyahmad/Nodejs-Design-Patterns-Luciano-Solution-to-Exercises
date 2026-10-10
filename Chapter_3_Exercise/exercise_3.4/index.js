@@ -21,7 +21,7 @@ function ticker(num, cb) {
   let ticks = 0;
   const getElapsedTime = () => Date.now() - start;
 
-  // exercise 3.4 (start)
+  // exercise 3.4 Part 1 (start)
   let initialTimestamp = Date.now();
   if (initialTimestamp % 5 === 0) {
     let error = new Error("Timestamp is divisible by 5");
@@ -31,8 +31,8 @@ function ticker(num, cb) {
     });
     return emitter;
   }
-
   // exercise 3.4 (end)
+
   process.nextTick(() => {
     emitter.emit("tick", ticks, getElapsedTime());
     ticks++;
@@ -45,7 +45,7 @@ function ticker(num, cb) {
       // If delay < 50, we are at the final fraction of time.
       if (delay < 50) return cb(null, ticks, elapsedTime);
 
-      //exercise 3.4
+      //exercise 3.4 Part 2 (start)
       let currentTimestamp = Date.now();
       if (currentTimestamp % 5 === 0) {
         let error = new Error("Timestamp is divisible by 5");
