@@ -11,6 +11,12 @@ Because the original authors of _Node.js Design Patterns_ do not provide officia
 - **Strict Concept Alignment:** I heavily scrutinize my own solutions to ensure they strictly adhere to the specific architectural paradigms, memory constraints, and event-driven concepts introduced in that chapter.
 - **Optimization & Peer Comparison:** To guarantee the most optimal outcome, I cross-reference my implementations with industry best practices and community discussions. My goal is never just to write code that passes, but to write production-ready, performant, and memory-safe systems.
 
+## 💡 A Note to Fellow Learners
+
+If you are currently working through the book, I strongly encourage you to **attempt the exercises yourself first** before looking at my code. The true value of this book comes from struggling with the concepts (especially streams and asynchronous flows).
+
+If you hit a wall, feel free to review my solutions to unblock yourself and see how I approached the problem. However, to maximize your learning, I highly recommend closing my solution afterward and trying to rewrite the code from scratch on your own.
+
 ## 🚀 Getting Started
 
 ### Prerequisites

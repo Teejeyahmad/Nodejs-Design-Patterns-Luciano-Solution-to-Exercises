@@ -1,6 +1,7 @@
 import { EventEmitter } from "node:events";
 import { readFile } from "node:fs";
 import { basename } from "node:path";
+import { nextTick } from "node:process";
 
 class FindRegex extends EventEmitter {
   constructor(regex) {
@@ -17,7 +18,7 @@ class FindRegex extends EventEmitter {
   find() {
     //  S  O  L  U  T  I  O  N  (START)
     const currentFiles = [...this.files];
-    process.nextTick(() => this.emit("starts", currentFiles));
+    nextTick(() => this.emit("starts", currentFiles));
     // (END)
     // beware of Zalgo!, using "process.nextTick" makes sure the method stays asynchronous
     //which ensures that you'll be able to add listener to the "starts" event after the function invocation,
