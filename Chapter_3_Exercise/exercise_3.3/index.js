@@ -16,37 +16,37 @@ import { EventEmitter } from "node:events";
  *    drifting further from perfection on every loop.
  */
 function ticker(num, cb) {
-  let start = Date.now();
-  const emitter = new EventEmitter();
-  let ticks = 0;
+	let start = Date.now();
+	const emitter = new EventEmitter();
+	let ticks = 0;
 
-  // EXERCISE 3.3 SOLUTION (START)
-  process.nextTick(() => {
-    emitter.emit("tick", ticks, Date.now() - start);
-    ticks++;
-  });
-  // EXERCISE 3.3 SOLUTION (END)
+	// EXERCISE 3.3 SOLUTION (START)
+	process.nextTick(() => {
+		emitter.emit("tick", ticks, Date.now() - start);
+		ticks++;
+	});
+	// EXERCISE 3.3 SOLUTION (END)
 
-  const timeout = (remainingtime) => {
-    let delay = remainingtime < 50 ? remainingtime : 50;
-    setTimeout(() => {
-      // If delay < 50, we are at the final fraction of time.
-      // The time logged here will include the accumulated event loop drift.
-      if (delay < 50) return cb(null, ticks, Date.now() - start);
-      emitter.emit("tick", ticks, Date.now() - start);
-      ticks++;
+	const timeout = (remainingtime) => {
+		let delay = remainingtime < 50 ? remainingtime : 50;
+		setTimeout(() => {
+			// If delay < 50, we are at the final fraction of time.
+			// The time logged here will include the accumulated event loop drift.
+			if (delay < 50) return cb(null, ticks, Date.now() - start);
+			emitter.emit("tick", ticks, Date.now() - start);
+			ticks++;
 
-      // If this was exactly the last 50ms cycle, fire the callback immediately.
-      if (remainingtime === 50) {
-        return cb(null, ticks, Date.now() - start);
-      }
-      timeout(remainingtime - 50);
-    }, delay);
-  };
-  timeout(num);
-  return emitter;
+			// If this was exactly the last 50ms cycle, fire the callback immediately.
+			if (remainingtime === 50) {
+				return cb(null, ticks, Date.now() - start);
+			}
+			timeout(remainingtime - 50);
+		}, delay);
+	};
+	timeout(num);
+	return emitter;
 }
 
 ticker(2049, (err, data, time) =>
-  console.log(`\x1b[32mTotal ticks: ${data}, Total time: ${time}\x1b[0m`),
+	console.log(`\x1b[32mTotal ticks: ${data}, Total time: ${time}\x1b[0m`),
 ).on("tick", (ticks, time) => console.log(`Tick: ${ticks}, Time: ${time}`));

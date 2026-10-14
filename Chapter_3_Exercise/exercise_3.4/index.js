@@ -16,65 +16,65 @@ import { EventEmitter } from "node:events";
  *    drifting further from perfection on every loop.
  */
 function ticker(num, cb) {
-  let start = Date.now();
-  const emitter = new EventEmitter();
-  let ticks = 0;
-  const getElapsedTime = () => Date.now() - start;
+	const start = Date.now();
+	const emitter = new EventEmitter();
+	let ticks = 0;
+	const getElapsedTime = () => Date.now() - start;
 
-  // exercise 3.4 Part 1 (start)
-  let initialTimestamp = Date.now();
-  if (initialTimestamp % 5 === 0) {
-    let error = new Error("Timestamp is divisible by 5");
-    process.nextTick(() => {
-      emitter.emit("error", error);
-      cb(error, ticks, getElapsedTime());
-    });
-    return emitter;
-  }
-  // exercise 3.4 (end)
+	// exercise 3.4 Part 1 (start)
+	const initialTimestamp = Date.now();
+	if (initialTimestamp % 5 === 0) {
+		const error = new Error("Timestamp is divisible by 5");
+		process.nextTick(() => {
+			emitter.emit("error", error);
+			cb(error, ticks, getElapsedTime());
+		});
+		return emitter;
+	}
+	// exercise 3.4 (end)
 
-  process.nextTick(() => {
-    emitter.emit("tick", ticks, getElapsedTime());
-    ticks++;
-  });
+	process.nextTick(() => {
+		emitter.emit("tick", ticks, getElapsedTime());
+		ticks++;
+	});
 
-  const scheduleNext = (remainingtime) => {
-    let delay = Math.min(remainingtime, 50);
-    setTimeout(() => {
-      const elapsedTime = getElapsedTime();
-      // If delay < 50, we are at the final fraction of time.
-      if (delay < 50) return cb(null, ticks, elapsedTime);
+	const scheduleNext = (remainingtime) => {
+		const delay = Math.min(remainingtime, 50);
+		setTimeout(() => {
+			const elapsedTime = getElapsedTime();
+			// If delay < 50, we are at the final fraction of time.
+			if (delay < 50) return cb(null, ticks, elapsedTime);
 
-      //exercise 3.4 Part 2 (start)
-      let currentTimestamp = Date.now();
-      if (currentTimestamp % 5 === 0) {
-        let error = new Error("Timestamp is divisible by 5");
-        emitter.emit("error", error);
-        return cb(error, ticks, elapsedTime);
-      }
-      //exercise 3.4 (end)
+			//exercise 3.4 Part 2 (start)
+			const currentTimestamp = Date.now();
+			if (currentTimestamp % 5 === 0) {
+				const error = new Error("Timestamp is divisible by 5");
+				emitter.emit("error", error);
+				return cb(error, ticks, elapsedTime);
+			}
+			//exercise 3.4 (end)
 
-      emitter.emit("tick", ticks, elapsedTime);
-      ticks++;
+			emitter.emit("tick", ticks, elapsedTime);
+			ticks++;
 
-      // If this was exactly the last 50ms cycle, fire the callback immediately.
-      if (remainingtime === 50) {
-        return cb(null, ticks, elapsedTime);
-      }
-      scheduleNext(remainingtime - 50);
-    }, delay);
-  };
+			// If this was exactly the last 50ms cycle, fire the callback immediately.
+			if (remainingtime === 50) {
+				return cb(null, ticks, elapsedTime);
+			}
+			scheduleNext(remainingtime - 50);
+		}, delay);
+	};
 
-  scheduleNext(num);
+	scheduleNext(num);
 
-  return emitter;
+	return emitter;
 }
 
 ticker(2049, (err, data, time) => {
-  if (err) console.error(`\x1b[31mError occurred: ${err.message}\x1b[0m`);
-  console.log(`\x1b[32mTotal ticks: ${data}, Total time: ${time}\x1b[0m`);
+	if (err) console.error(`\x1b[31mError occurred: ${err.message}\x1b[0m`);
+	console.log(`\x1b[32mTotal ticks: ${data}, Total time: ${time}\x1b[0m`);
 })
-  .on("tick", (ticks, time) => console.log(`Tick: ${ticks}, Time: ${time}`))
-  .on("error", (error) =>
-    console.error(`\x1b[31mError Event occurred: ${error.message}\x1b[0m`),
-  );
+	.on("tick", (ticks, time) => console.log(`Tick: ${ticks}, Time: ${time}`))
+	.on("error", (error) =>
+		console.error(`\x1b[31mError Event occurred: ${error.message}\x1b[0m`),
+	);

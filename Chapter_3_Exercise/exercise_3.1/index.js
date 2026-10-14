@@ -4,54 +4,54 @@ import { basename } from "node:path";
 import { nextTick } from "node:process";
 
 class FindRegex extends EventEmitter {
-  constructor(regex) {
-    super();
-    this.regex = regex;
-    this.files = [];
-  }
+	constructor(regex) {
+		super();
+		this.regex = regex;
+		this.files = [];
+	}
 
-  addFile(file) {
-    this.files.push(file);
-    return this;
-  }
+	addFile(file) {
+		this.files.push(file);
+		return this;
+	}
 
-  find() {
-    //  S  O  L  U  T  I  O  N  (START)
-    const currentFiles = [...this.files];
-    nextTick(() => this.emit("starts", currentFiles));
-    // (END)
-    // beware of Zalgo!, using "process.nextTick" makes sure the method stays asynchronous
-    //which ensures that you'll be able to add listener to the "starts" event after the function invocation,
-    for (const file of this.files) {
-      readFile(file, "utf8", (err, content) => {
-        if (err) {
-          return this.emit("error", err);
-        }
+	find() {
+		//  S  O  L  U  T  I  O  N  (START)
+		const currentFiles = [...this.files];
+		nextTick(() => this.emit("starts", currentFiles));
+		// (END)
+		// beware of Zalgo!, using "process.nextTick" makes sure the method stays asynchronous
+		//which ensures that you'll be able to add listener to the "starts" event after the function invocation,
+		for (const file of this.files) {
+			readFile(file, "utf8", (err, content) => {
+				if (err) {
+					return this.emit("error", err);
+				}
 
-        this.emit("fileread", file);
+				this.emit("fileread", file);
 
-        const match = content.match(this.regex);
-        if (match) {
-          for (const elem of match) {
-            this.emit("found", file, elem);
-          }
-        }
-      });
-    }
-    return this;
-  }
+				const match = content.match(this.regex);
+				if (match) {
+					for (const elem of match) {
+						this.emit("found", file, elem);
+					}
+				}
+			});
+		}
+		return this;
+	}
 }
 
 const findRegexInstance = new FindRegex(/hello [\w.]+/);
 findRegexInstance
-  .addFile(new URL("fileA.txt", import.meta.url))
-  .addFile(new URL("fileB.json", import.meta.url))
-  .find()
-  .on("starts", (files) => {
-    files = files.map((file) => basename(file.pathname));
-    console.log(`\x1b[32mBrowsing ${files}\x1b[0m`);
-  })
-  .on("found", (file, match) =>
-    console.log(`Matched "${match}" in ${basename(file.pathname)}`),
-  )
-  .on("error", (err) => console.error(`Error emitted ${err.message}`));
+	.addFile(new URL("fileA.txt", import.meta.url))
+	.addFile(new URL("fileB.json", import.meta.url))
+	.find()
+	.on("starts", (files) => {
+		files = files.map((file) => basename(file.pathname));
+		console.log(`\x1b[32mBrowsing ${files}\x1b[0m`);
+	})
+	.on("found", (file, match) =>
+		console.log(`Matched "${match}" in ${basename(file.pathname)}`),
+	)
+	.on("error", (err) => console.error(`Error emitted ${err.message}`));

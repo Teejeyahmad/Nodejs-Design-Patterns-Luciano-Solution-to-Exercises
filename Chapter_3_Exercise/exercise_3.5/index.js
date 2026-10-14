@@ -13,44 +13,44 @@ import { join, resolve } from "node:path";
  * @param {function} cb - Error-first callback (err, { file, size })
  */
 function findLargest(path, cb) {
-  let largest = { file: "", size: 0 };
+	let largest = { file: "", size: 0 };
 
-  let count = 1; // We start at 1 to represent the initial directory scan itself.
-  const checkRecursive = (path, cb) => {
-    readdir(path, (err, files) => {
-      if (err) {
-        return cb(err);
-      }
-      count--;
-      count += files.length;
+	let count = 1; // We start at 1 to represent the initial directory scan itself.
+	const checkRecursive = (path, cb) => {
+		readdir(path, (err, files) => {
+			if (err) {
+				return cb(err);
+			}
+			count--;
+			count += files.length;
 
-      // BUG FIX: Handle empty directories []
-      if (count === 0) {
-        return;
-      }
+			// BUG FIX: Handle empty directories []
+			if (count === 0) {
+				return;
+			}
 
-      for (let i = 0; i < files.length; i++) {
-        stat(join(path, files[i]), (err, stats) => {
-          if (err) {
-            return cb(err);
-          }
-          if (stats.isFile()) {
-            console.log({ file: files[i], size: stats.size });
+			for (let i = 0; i < files.length; i++) {
+				stat(join(path, files[i]), (err, stats) => {
+					if (err) {
+						return cb(err);
+					}
+					if (stats.isFile()) {
+						console.log({ file: files[i], size: stats.size });
 
-            if (stats.size > largest.size) {
-              largest = { file: files[i], size: stats.size };
-            }
+						if (stats.size > largest.size) {
+							largest = { file: files[i], size: stats.size };
+						}
 
-            count--;
-            if (count === 0) return cb(null, largest);
-          } else if (stats.isDirectory()) {
-            checkRecursive(join(path, files[i]), cb);
-          }
-        });
-      }
-    });
-  };
-  checkRecursive(path, cb);
+						count--;
+						if (count === 0) return cb(null, largest);
+					} else if (stats.isDirectory()) {
+						checkRecursive(join(path, files[i]), cb);
+					}
+				});
+			}
+		});
+	};
+	checkRecursive(path, cb);
 }
 
 /*
@@ -66,6 +66,6 @@ function findLargest(path, cb) {
 const path = resolve(import.meta.dirname, "DummyFolder");
 
 findLargest(path, (err, data) => {
-  if (err) console.log(err);
-  else console.log("Largest", data);
+	if (err) console.log(err);
+	else console.log("Largest", data);
 });

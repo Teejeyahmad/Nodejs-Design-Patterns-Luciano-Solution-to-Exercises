@@ -1,19 +1,17 @@
 {
-  "type": "module",
-  "name": "nodejs-design-patterns-luciano-solution-to-exercises",
-  "scripts": {
-    "3.1": "node Chapter_3_Exercise/exercise_3.1/index.js",
-    "3.2": "node Chapter_3_Exercise/exercise_3.2/index.js",
-    "3.3": "node Chapter_3_Exercise/exercise_3.3/index.js",
-    "3.4": "node Chapter_3_Exercise/exercise_3.4/index.js",
-    "3.5": "node Chapter_3_Exercise/exercise_3.5/index.js"
-  },
-  "devDependencies": {
-    "@eslint/css": "^2.0.0",
-    "@eslint/js": "^10.0.1",
-    "@eslint/json": "^2.1.1",
-    "@eslint/markdown": "^8.0.3",
-    "eslint": "^10.12.0",
-    "globals": "^17.13.0"
-  }
+	"type": "module",
+	"name": "nodejs-design-patterns-luciano-solution-to-exercises",
+	"scripts": {
+		"3.1": "node Chapter_3_Exercise/exercise_3.1/index.js",
+		"3.2": "node Chapter_3_Exercise/exercise_3.2/index.js",
+		"3.3": "node Chapter_3_Exercise/exercise_3.3/index.js",
+		"3.4": "node Chapter_3_Exercise/exercise_3.4/index.js",
+		"3.5": "node Chapter_3_Exercise/exercise_3.5/index.js",
+		"4.1": "node Chapter_4_Exercise/exercise_4.1/index.js"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.5.15",
+		"@types/node": "^26.6.5",
+		"globals": "^17.13.0"
+	}
 }
