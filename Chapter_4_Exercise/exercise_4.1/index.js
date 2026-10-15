@@ -7,7 +7,7 @@ function concatFiles(...args) {
   }
   const cb = args.pop();
   const dest = args.pop();
-  if (!dest || args.length == 0)
+  if (!dest || args.length === 0)
     throw new Error("Must provide at least one source file and a destination");
   const iterate = (index) => {
     if (index === args.length) return cb();
