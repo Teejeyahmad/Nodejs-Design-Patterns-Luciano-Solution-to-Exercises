@@ -1,4 +1,4 @@
-import { appendFile, readFile } from "node:fs";
+import { appendFile, readFile, writeFile } from "node:fs";
 import { join } from "node:path";
 
 function concatFiles(...args) {
@@ -7,13 +7,18 @@ function concatFiles(...args) {
   }
   const cb = args.pop();
   const dest = args.pop();
+
   if (!dest || args.length === 0)
     throw new Error("Must provide at least one source file and a destination");
+
   const iterate = (index) => {
     if (index === args.length) return cb();
+
     readFile(args[index], (err, content) => {
       if (err) return cb(err);
-      appendFile(dest, `File ${index + 1}:\n${content}\n`, (err) => {
+
+      const write = index === 0 ? writeFile : appendFile;
+      write(dest, `File ${index + 1}:\n${content}\n`, (err) => {
         if (err) return cb(err);
         iterate(index + 1);
       });

@@ -1,42 +1,42 @@
 import { readdir, stat } from "node:fs";
-import { basename, join } from "node:path";
-
-const list = [];
+import { join } from "node:path";
 
 function listNestedFiles(dir, maxDepth, cb) {
-  if (maxDepth === 0) return process.nextTick(() => cb(null, list));
+  const list = [];
+  const visitEntry = (entry, maxDepth, cb) => {
+    stat(entry, (err, childFiles) => {
+      if (err) return cb(err);
 
-  readdir(dir, (err, entries) => {
-    if (err) {
-      return cb(err);
-    }
-    function iterate(indx) {
-      if (indx === entries.length) return cb(null, list);
+      if (childFiles.isFile()) {
+        list.push(entry);
+      }
 
-      visitEntry(join(dir, entries[indx]), maxDepth, (err) => {
-        if (err) return cb(err);
-        iterate(indx + 1);
-      });
-    }
+      if (childFiles.isDirectory()) return nestedFiles(entry, maxDepth - 1, cb);
 
-    iterate(0);
-  });
-}
+      return cb(null); // also skip the mysterious entry (file or folder)
+    });
+  };
+  const nestedFiles = (dir, maxDepth, cb) => {
+    if (maxDepth === 0) return process.nextTick(() => cb(null, list));
 
-function visitEntry(entry, maxDepth, cb) {
-  stat(entry, (err, childFiles) => {
-    if (err) return cb(err);
+    readdir(dir, (err, entries) => {
+      if (err) {
+        return cb(err);
+      }
+      function iterate(indx) {
+        if (indx === entries.length) return cb(null, list);
 
-    if (childFiles.isFile()) {
-      list.push(basename(entry));
-      return cb(null);
-    }
+        visitEntry(join(dir, entries[indx]), maxDepth, (err) => {
+          if (err) return cb(err);
+          iterate(indx + 1);
+        });
+      }
 
-    if (childFiles.isDirectory())
-      return listNestedFiles(entry, maxDepth - 1, cb);
+      iterate(0);
+    });
+  };
 
-    return cb(null); // just skip the mysterious entry (file or folder)
-  });
+  nestedFiles(dir, maxDepth, cb);
 }
 
 listNestedFiles(join(import.meta.dirname, "Deepfold"), 5, (err, list) => {
