@@ -9,11 +9,17 @@
     "3.5": "node Chapter_3_Exercise/exercise_3.5/index.js",
     "4.1": "node Chapter_4_Exercise/exercise_4.1/index.js",
     "4.2": "node Chapter_4_Exercise/exercise_4.2/index.js",
-    "4.3": "node Chapter_4_Exercise/exercise_4.3/index.js"
+    "4.3": "node Chapter_4_Exercise/exercise_4.3/index.js",
+    "4.4": "node Chapter_4_Exercise/exercise_4.4/index.js"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.15",
     "@types/node": "^26.6.5",
     "globals": "^17.13.0"
+  },
+  "dependencies": {
+    "htmlparser2": "^12.0.0",
+    "mkdirp": "^3.0.1",
+    "slug": "^12.0.1"
   }
 }
